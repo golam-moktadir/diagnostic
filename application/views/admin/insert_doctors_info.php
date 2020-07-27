@@ -1,0 +1,132 @@
+<?php
+if ($msg == "main") {
+    $msg = "";
+} elseif ($msg == "empty") {
+    $msg = "Please fill out all required fields";
+} elseif ($msg == "created") {
+    $msg = "Created Successfully";
+} elseif ($msg == "edit") {
+    $msg = "Edited Successfully";
+} elseif ($msg == "delete") {
+    $msg = "Deleted Successfully";
+}
+?>
+<aside>
+    <section class="content">
+        <div class="row" style="margin-top: 55px;">
+            <section class="col-xs-12 connectedSortable">
+                <div class="" style="color: black;">
+                    <?php echo form_open_multipart('Insert/governing_body_profile'); ?>
+                    <div class="box-body">
+                        <p style="font-size: 20px;">Create Doctor</p>
+                        <p  style="font-size: 20px; color: #066;"><?php echo $msg; ?></p>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label for="name">Doctor Name</label>
+                                <input type="text" class="form-control" id="name" 
+                                       placeholder="" name="name">
+                            </div>
+                         <div class="form-group col-sm-6">
+                                    <label for="designation">Select Designation</label>
+                                    <select name="designation" id="designation" class="form-control selectpicker"
+                                            data-container="body">
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($all_designation as $single_designation) { ?>
+                                            <option value="<?php echo $single_designation->designation; ?>">
+                                                <?php echo $single_designation->designation; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            <div class="form-group col-sm-6">
+                                <label for="mobile">Mobile No</label>
+                                <input type="text" class="form-control" id="mobile" placeholder="" name="mobile">
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="address">Address</label>
+                                <input type="text" class="form-control" id="address" placeholder="" name="address">
+                            </div>
+                             <div class="form-group col-sm-6">
+                                    <label for="department">Select Department</label>
+                                    <select name="department" id="department" class="form-control selectpicker"
+                                            data-container="body">
+                                        <option value="">-- Select --</option>
+                                        <?php foreach ($all_dept as $single_department) { ?>
+                                            <option value="<?php echo $single_department->department; ?>">
+                                                <?php echo $single_department->department; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            <div class="form-group col-sm-6">
+                                <label for="frees">Frees</label>
+                                <input type="text" class="form-control" id="frees" placeholder="" name="frees">
+                            </div>
+                            <div class="form-group col-sm-3 col-xs-12">
+                                <label for="class_time">Duty Time</label>
+                                <input type="time" value="" class="form-control"
+                                       id="doctors_time" name="doctors_time">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer clearfix">
+                        <button type="submit" class="pull-left btn btn-success">Submit <i class="fa fa-arrow-circle-right"></i></button>
+                    </div>
+                    </form>
+                </div>
+
+                <div class="box box-info">
+                    <div class="box-header">
+                        <h3 class="box-title" style="color: black;">Doctor's Information</h3>
+                    </div>
+
+                    <!-- /.box-header -->
+                    <div class="box-body table-responsive" style="width: 98%; overflow: scroll; color: black;">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <th style="text-align: center;">No.</th>
+                                <th style="text-align: center;">Doctor Name</th>
+                                <th style="text-align: center;">Specialist In</th>
+                                <th style="text-align: center;">Contact No.</th>
+                                <th style="text-align: center;">Address</th>
+                                <th style="text-align: center;">Department</th>
+                                <th style="text-align: center;">Fees</th>
+                                <th style="text-align: center;">Doctor Time</th>   
+                                <th style="text-align: center;">Edit/Delete</th> 
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php $count = 0;
+                            foreach ($doctor as $info) {
+                                $count++;
+                                ?>
+                                <tr>
+                                    <td style="text-align: center;"><?php echo $count; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->name; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->designation; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->mobile; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->address; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->department; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->frees; ?></td>
+                                    <td style="text-align: center;"><?php echo $info->doctors_time; ?></td>  
+                                     <td style="text-align: center;">
+<!--                                        <a style="margin: 5px;" class="btn btn-info"
+                                           href="">Edit
+                                        </a>-->
+                                        <a style="margin: 5px;" class="btn btn-danger"
+                                           href="<?php echo base_url(); ?>Delete/create_doctor/<?php echo $info->record_id; ?>">Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</aside>
