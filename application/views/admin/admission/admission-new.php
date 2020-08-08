@@ -1,11 +1,11 @@
-<aside >
+<aside>
     <section class="content">
         <div class="row">
             <section class="col-xs-12 connectedSortable" id="full_page">
                 <div style="color: black; background: #a6d7ff; padding: 8px; border: 2px solid #055d9c; margin-bottom:5px;" class="no_print">
                     <form action="<?php echo base_url().'admission/create-admission'?>" method='post'>
                     <div class="box-body">
-                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;">Patient Admission For Operation</p>
+                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;">Operation Case </p>
                         <h3 class="text-center text-danger"><?php echo $this->session->flashdata('error' ) ?></h3>
                         <h3 class="text-center text-success"><?php echo $this->session->flashdata('success' ) ?></h3>
                         <div class="row">
@@ -14,8 +14,8 @@
                                     <select name="patient_id" id="patient_id" class="form-control selectpicker">
                                         <option value="">--Select--</option>
                                         <?php foreach ($all_patient as $info) { ?>
-                                            <option value="<?php echo $info->record_id ?>">
-                                                <?php echo "$info->name [ID: $info->record_id]"; ?>
+                                            <option value="<?php echo $info->patient_id ?>">
+                                                <?php echo "$info->name [ID: $info->patient_id]"; ?>
                                             </option>
                                         <?php } ?>
                                     </select>
@@ -25,6 +25,7 @@
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="mobile">Mobile No.</label>
                                 <input type="text" name="mobile" id="mobile" class="form-control" disabled="">
+                                <input type="hidden" name="admit_id" id="admit_id">
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="age">Age</label>
@@ -87,17 +88,8 @@
                                        placeholder="Relation with Patient" name="relation">
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
-                                <label for="admission_date">Admission Date</label>
-                                <input type="text" class="form-control new_datepicker" id="admission_date" value="<?php echo date('Y-m-d'); ?>" name="admission_date">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
                                 <label for="appointment_time">Operation Date</label>
                                 <input type="text" class="form-control new_datepicker" id="operation_date" name="operation_date" value="<?php echo date('Y-m-d'); ?>">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="date">Advance Fee (If any)</label>
-                                <input type="number" class="form-control" id="advance_fee"
-                                       placeholder="Advance Admission Fee" name="advance_fee">
                             </div>
                         </div>
                     </div>
@@ -123,7 +115,6 @@
                                     <th>Anesthesia</th>
                                     <th>Diagnosis</th>
                                     <th>Relation</th>
-                                    <th>Admission Date</th>
                                     <th>Operation Date</th>
                                     <th>Action</th>
                                 </tr>
@@ -142,7 +133,6 @@
                                         <td><?php echo $single_value->anesthesia ?></td>
                                         <td><?php echo $single_value->diagnosis; ?></td> 
                                         <td><?php echo $single_value->relation; ?></td>
-                                        <td><?php echo $single_value->admission_date; ?></td>
                                         <td><?php echo $single_value->operation_date; ?></td>
                                         <td>
                                             <a href="<?php echo base_url().'admission/edit-admission/'.$single_value->record_id.'/'.$single_value->category_id ?>" class="btn btn-sm btn-success"><i class="fa fa-edit"></i>
@@ -163,23 +153,19 @@
 </aside>
 
 <script type="text/javascript">
-    $("#patient_id").on("change paste keyup", function () {
-        var patient = $('#patient_id').val().split("###");
-        var patient_id = patient[0];
-        var patient_name = patient[1];
-        var post_data = {
-            'patient_id': patient_id,
-            '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
-        };
+    $("#patient_id").change(function () {
+        var patient_id = $('#patient_id').val();
+
         $.ajax({
+            url: "<?php echo base_url().'AdmissionController/getSinglePatientAdmitInfo' ?>",
             type: "POST",
-            url: "<?php echo base_url(); ?>Get_ajax_value/get_patient_age_mobile_address",
-            data: post_data,
             dataType: 'json',
-            success: function (data) {
-                $('#age').val(data[0]);
-                $('#mobile').val(data[1]);
-                $('#address').val(data[2]);
+            data:{patient_id:patient_id},
+            success: function (response) {
+                $("#admit_id").val(response.admit_id);
+                $("#age").val(response.age);
+                $("#mobile").val(response.mobile);
+                $("#address").val(response.address);
             }
         });
     });
@@ -189,9 +175,11 @@
         $.ajax({
             url:"<?php echo base_url().'AdmissionController/getOperationName' ?>",
             type:'post',
+            dataType:'json',
             data:{category_id:category_id},
             success:function(response){
-                $("#operation_id").html(response);
+                console.log(response);
+                $("#operation_id").empty().html(response);
             }
         });
     });

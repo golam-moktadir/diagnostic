@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.4
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jul 15, 2020 at 12:10 PM
--- Server version: 10.3.23-MariaDB-cll-lve
--- PHP Version: 7.3.6
+-- Host: 127.0.0.1
+-- Generation Time: Aug 08, 2020 at 07:51 AM
+-- Server version: 10.4.11-MariaDB
+-- PHP Version: 7.3.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `greensoftit_diagnostic`
+-- Database: `diagnostic`
 --
 
 -- --------------------------------------------------------
@@ -29,16 +28,16 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `about` (
-  `id` int(100) NOT NULL,
-  `about` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` int(11) NOT NULL,
+  `about` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `about`
 --
 
 INSERT INTO `about` (`id`, `about`) VALUES
-(1, 'GREEN Pathology Complex - the first international standard super-specialty hospital of the country.');
+(1, 'more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.');
 
 -- --------------------------------------------------------
 
@@ -110,6 +109,57 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`record_id`, `name`, `designation`, `mobile`, `image`, `admin_unique_id`, `password`) VALUES
 (1, 'admin', '', '', '', 'admin', 'plz258');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admission_fee_invoice`
+--
+
+CREATE TABLE `admission_fee_invoice` (
+  `record_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `admission_fee` float NOT NULL,
+  `advance_amount` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admission_fee_invoice`
+--
+
+INSERT INTO `admission_fee_invoice` (`record_id`, `patient_id`, `admission_fee`, `advance_amount`) VALUES
+(2, 280, 0, 0),
+(3, 277, 500, 50000),
+(4, 281, 300, 4000);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admission_patient`
+--
+
+CREATE TABLE `admission_patient` (
+  `record_id` int(11) NOT NULL,
+  `admit_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `operation_id` int(11) NOT NULL,
+  `doctor_id` int(11) NOT NULL,
+  `anesthesia_id` int(11) NOT NULL,
+  `diagnosis` varchar(255) NOT NULL,
+  `relation` varchar(255) NOT NULL,
+  `operation_price` float NOT NULL,
+  `operation_date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `admission_patient`
+--
+
+INSERT INTO `admission_patient` (`record_id`, `admit_id`, `patient_id`, `category_id`, `operation_id`, `doctor_id`, `anesthesia_id`, `diagnosis`, `relation`, `operation_price`, `operation_date`) VALUES
+(5, 3, 277, 23, 142, 45, 45, 'abc', 'none', 20200700, '2020-07-28'),
+(6, 2, 280, 24, 138, 47, 48, 'nbvcc', 'none', 20200700, '2020-07-28'),
+(7, 2, 280, 21, 140, 47, 32, 'abc', 'none', 20200700, '2020-07-29');
 
 -- --------------------------------------------------------
 
@@ -385,7 +435,7 @@ CREATE TABLE `contact` (
 --
 
 INSERT INTO `contact` (`id`, `c_name`, `address`, `email`, `email2`, `email3`, `web`, `hotline`, `hotline2`, `hotline3`) VALUES
-(1, 'GREEN Pathology Complex', 'Mirpur-1, Dhaka-1216.', 'greensoftwaretech@gmail.com', '', '', 'greensoftechbd.com', '01619180956', '01719180956', '');
+(1, 'GREEN Pathology Complex', 'Mirpur-1, Dhaka-1216.', 'greensoftwaretech@gmail.com', 'cse.limon.33@gmail.com', '', 'greensoftechbd.com', '01619180956', '01719180956', '');
 
 -- --------------------------------------------------------
 
@@ -403,7 +453,7 @@ CREATE TABLE `counter` (
 --
 
 INSERT INTO `counter` (`counter_id`, `count`) VALUES
-(1, 9679);
+(1, 9747);
 
 -- --------------------------------------------------------
 
@@ -459,7 +509,9 @@ INSERT INTO `create_bill` (`record_id`, `invoice_no`, `date`, `particular`, `pat
 (225, 9, '2020-07-13', 'Sales Test', '277', 'Masud Rana', 400, 0, 0, 0, 400, 0),
 (226, 10, '2020-07-13', 'Sales Test', '', '', 500, 99, 0, 0, 401, 0),
 (227, 0, '2020-07-13', 'Pay Test Due', '278', 'Gias Uddin', 0, 0, 0, 1200, 650, 0),
-(228, 11, '2020-07-14', 'Sales Test', '277', 'Masud Rana', 850, 0, 0, 0, 850, 0);
+(228, 11, '2020-07-14', 'Sales Test', '277', 'Masud Rana', 850, 0, 0, 0, 850, 0),
+(229, 12, '2020-07-16', 'Sales Test', '281', 'Test Patient', 500, 0, 0, 500, 0, 0),
+(230, 0, '2020-07-16', 'Pay Test Due', '280', 'Saadman Alvy', 0, 0, 0, 600, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -667,6 +719,26 @@ CREATE TABLE `enquiry` (
   `mobile` varchar(200) NOT NULL,
   `email` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expenditure`
+--
+
+CREATE TABLE `expenditure` (
+  `record_id` int(12) NOT NULL,
+  `expenditure_title` varchar(200) NOT NULL,
+  `expenditure_rate` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `expenditure`
+--
+
+INSERT INTO `expenditure` (`record_id`, `expenditure_title`, `expenditure_rate`) VALUES
+(1, 'fdgsghfdhejdfgsd', 200),
+(2, 'mnfgggh', 800);
 
 -- --------------------------------------------------------
 
@@ -1036,6 +1108,118 @@ INSERT INTO `medicine_presentation` (`record_id`, `medicine_presentation`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `new_msg`
+--
+
+CREATE TABLE `new_msg` (
+  `record_id` int(11) NOT NULL,
+  `news` varchar(5000) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `new_msg`
+--
+
+INSERT INTO `new_msg` (`record_id`, `news`) VALUES
+(20, 'testing khkak');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operation_category`
+--
+
+CREATE TABLE `operation_category` (
+  `record_id` int(12) NOT NULL,
+  `category_name` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `operation_category`
+--
+
+INSERT INTO `operation_category` (`record_id`, `category_name`) VALUES
+(21, 'Internel'),
+(23, 'Orthopredic'),
+(24, 'External');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operation_details`
+--
+
+CREATE TABLE `operation_details` (
+  `record_id` int(11) NOT NULL,
+  `patient_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `operation_id` int(11) NOT NULL,
+  `doctor_id` int(11) NOT NULL,
+  `anesthesia_id` int(11) NOT NULL,
+  `diagnosis` varchar(255) NOT NULL,
+  `operation_date` date NOT NULL,
+  `operation_price` float NOT NULL,
+  `total_price` float NOT NULL,
+  `sub_total` float NOT NULL,
+  `payable_amount` float NOT NULL,
+  `discount` float NOT NULL,
+  `due` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `operation_details`
+--
+
+INSERT INTO `operation_details` (`record_id`, `patient_id`, `category_id`, `operation_id`, `doctor_id`, `anesthesia_id`, `diagnosis`, `operation_date`, `operation_price`, `total_price`, `sub_total`, `payable_amount`, `discount`, `due`) VALUES
+(10, 277, 23, 142, 48, 47, 'abc', '2020-08-13', 6000, 7000, 7000, 7000, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operation_equipment`
+--
+
+CREATE TABLE `operation_equipment` (
+  `record_id` int(11) NOT NULL,
+  `invoice_id` int(11) NOT NULL,
+  `expenditure_id` int(11) NOT NULL,
+  `new_expenditure_price` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `operation_equipment`
+--
+
+INSERT INTO `operation_equipment` (`record_id`, `invoice_id`, `expenditure_id`, `new_expenditure_price`) VALUES
+(7, 10, 1, 200),
+(8, 10, 2, 800);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `operation_name`
+--
+
+CREATE TABLE `operation_name` (
+  `record_id` int(12) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `operation_name` varchar(200) NOT NULL,
+  `rate` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `operation_name`
+--
+
+INSERT INTO `operation_name` (`record_id`, `category_id`, `operation_name`, `rate`) VALUES
+(138, 24, 'external head operation', 600),
+(140, 21, 'piles operation', 15000),
+(141, 23, 'finger broken operation', 5000),
+(142, 23, 'leg broken operation', 6000);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `operation_report`
 --
 
@@ -1096,7 +1280,8 @@ CREATE TABLE `patient` (
 INSERT INTO `patient` (`record_id`, `unique_id`, `name`, `age`, `mobile`, `weight`, `height`, `address`) VALUES
 (277, 0, 'Masud Rana', '45 Yrs', '01619180956', '70', '5.5\"', 'Mirpur1'),
 (278, 0, 'Gias Uddin', '50 Yrs', '01619180956', '75', '6.00 F', 'Mirpur1'),
-(280, 0, 'Saadman Alvy', '20', '+8801818234596', '70', '5 feet', '7/2 Khodadad Khan Road, Kushtia');
+(280, 0, 'Saadman Alvy', '20', '+8801818234596', '70', '5 feet', '7/2 Khodadad Khan Road, Kushtia'),
+(281, 0, 'Test Patient', '25', '+8801773080682', '65', '5.5\"', 'kolabagan');
 
 -- --------------------------------------------------------
 
@@ -1183,7 +1368,8 @@ INSERT INTO `pay_test_due` (`record_id`, `date`, `patient_id`, `patient_name`, `
 (18, '2020-07-12', '278', 'Gias Uddin', 950, 0, 0),
 (19, '2020-07-12', '278', 'Gias Uddin', 950, 950, 0),
 (20, '2020-07-12', '280', 'Saadman Alvy', 400, 400, 0),
-(21, '2020-07-13', '278', 'Gias Uddin', 1850, 1200, 650);
+(21, '2020-07-13', '278', 'Gias Uddin', 1850, 1200, 650),
+(22, '2020-07-16', '280', 'Saadman Alvy', 600, 600, 0);
 
 -- --------------------------------------------------------
 
@@ -1193,21 +1379,22 @@ INSERT INTO `pay_test_due` (`record_id`, `date`, `patient_id`, `patient_name`, `
 
 CREATE TABLE `photo_gallery` (
   `record_id` int(11) NOT NULL,
-  `image_name` varchar(1000) CHARACTER SET utf8mb4 NOT NULL,
-  `image_id` varchar(500) CHARACTER SET latin1 NOT NULL
+  `title` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
+  `image` varchar(255) CHARACTER SET latin1 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `photo_gallery`
 --
 
-INSERT INTO `photo_gallery` (`record_id`, `image_name`, `image_id`) VALUES
+INSERT INTO `photo_gallery` (`record_id`, `title`, `image`) VALUES
 (1, 'Ultrasonography', '1.jpg'),
 (2, 'Cardiac Test', '2.jpg'),
 (3, 'Microbiology', '3.jpg'),
 (4, 'Clinical Pathology', '4.jpg'),
 (5, 'Immunological Test', '5.jpg'),
-(6, 'Biochemical Test', '6.jpg');
+(6, 'Biochemical Test', '6.jpg'),
+(7, 'sdafsfagddf', '3_2.jpg');
 
 -- --------------------------------------------------------
 
@@ -1493,7 +1680,8 @@ INSERT INTO `report_haematology` (`record_id`, `patient_id`, `patient_name`, `da
 (8, 244, 'Mozaffar Hossain', '2020-07-11', '42 Yrs.', '', 'Dr.Md. Nazrul Islam [DMF(Dhaka)]', '14.0', '15', '6.2', '34', '56', '04', '06', '00', '00', '', '189', '10.5', '14.7', '0.20', '5.2', '41.7', '79.7', '26.8', '33.6', '12.6', '38.4', '30.8', '', '', '', '', 24, '', '2020-07-11', ''),
 (9, 278, 'Gias Uddin', '2020-07-13', '50 Yrs', '', 'Md. Abdus Sattar Khan', '3', '', '', '', '', '', '', '', '', '', '', '', '', '', '5', '8', '', '', '', '', '', '', '', '', '', '', 30, '', '2020-07-13', ''),
 (10, 277, 'Masud Rana', '2020-07-14', '45 Yrs', 'Male', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 31, '', '2020-07-14', ''),
-(11, 277, 'Masud Rana', '2020-07-14', '45 Yrs', '', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '7.5', '', '', '', '', '5', '2', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 32, '', '2020-07-14', '');
+(11, 277, 'Masud Rana', '2020-07-14', '45 Yrs', '', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '7.5', '', '', '', '', '5', '2', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 32, '', '2020-07-14', ''),
+(12, 281, 'Test Patient', '2020-07-16', '25', 'Male', 'Dr.Md. Rukunuzzaman [MBBS,BCS(H), CCD(BIRDEM),CMU(Ultra)]', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '25', '', '', '', '22', '', '', '', '', '', '', '', 33, '', '2020-07-16', '');
 
 -- --------------------------------------------------------
 
@@ -1969,7 +2157,9 @@ INSERT INTO `sales_test` (`record_id`, `invoice_no`, `date`, `patient_id`, `pati
 (433, 10, '2020-07-13', 0, '', 'Dr.Md. Rukunuzzaman [MBBS,BCS(H), CCD(BIRDEM),CMU(Ultra)]', '45 Yrs', '01619180956', 'Biochemistry', 'FBS/RBS/2HABF', 100, 500, 99, 401, 0, 401, 0, 0),
 (434, 11, '2020-07-14', 277, 'Masud Rana', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '45 Yrs', '01619180956', 'Haematology', 'CBC with ESR', 400, 850, 0, 850, 0, 850, 0, 0),
 (435, 11, '2020-07-14', 277, 'Masud Rana', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '45 Yrs', '01619180956', 'Haematology', 'TC/DC/ESR/HB', 200, 850, 0, 850, 0, 850, 0, 0),
-(436, 11, '2020-07-14', 277, 'Masud Rana', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '45 Yrs', '01619180956', 'Haematology', 'Malaria Parasite (MP)', 250, 850, 0, 850, 0, 850, 0, 0);
+(436, 11, '2020-07-14', 277, 'Masud Rana', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', '45 Yrs', '01619180956', 'Haematology', 'Malaria Parasite (MP)', 250, 850, 0, 850, 0, 850, 0, 0),
+(437, 12, '2020-07-16', 281, 'Test Patient', 'Dr.Md. Rukunuzzaman [MBBS,BCS(H), CCD(BIRDEM),CMU(Ultra)]', '25', '+8801773080682', 'Haematology', 'Total Circulating Eosinophils', 100, 500, 0, 500, 500, 0, 0, 20),
+(438, 12, '2020-07-16', 281, 'Test Patient', 'Dr.Md. Rukunuzzaman [MBBS,BCS(H), CCD(BIRDEM),CMU(Ultra)]', '25', '+8801773080682', 'Haematology', 'CBC with ESR', 400, 500, 0, 500, 500, 0, 0, 100);
 
 -- --------------------------------------------------------
 
@@ -2034,13 +2224,12 @@ CREATE TABLE `single_page_content` (
 --
 
 INSERT INTO `single_page_content` (`record_id`, `title`, `image`, `details`) VALUES
-(4, '8', '4.jpg', 'he term originally referred to messages sent using the Short Message Service (SMS). It has grown beyond alphanumeric text to include multimedia messages (known as MMS) containing digital images, videos, and sound content, as well as ideograms known as emoji (happy faces, sad faces, and other icons).'),
+(4, '4', '4.jpg', 'he term originally referred to messages sent using the Short Message Service (SMS). It has grown beyond alphanumeric text to include multimedia messages (known as MMS) containing digital images, videos, and sound content, as well as ideograms known as emoji (happy faces, sad faces, and other icons).'),
 (7, '8', '7.jpg', 'ultrasonography'),
-(16, '4', '16.jpg', 'X-rays are a type of radiation called electromagnetic waves. X-ray imaging creates pictures of the inside of your body. The images show the parts of your body in different shades of black and white. ... Calcium in bones absorbs x-rays the most, so bones look white. Fat and other soft tissues absorb less and look gray.'),
+(16, '', '16.jpg', 'X-rays are a type of radiation called electromagnetic waves. X-ray imaging creates pictures of the inside of your body. The images show the parts of your body in different shades of black and white. ... Calcium in bones absorbs x-rays the most, so bones look white. Fat and other soft tissues absorb less and look gray.'),
 (17, '9', '17.jpg', 'Modern device for everything you need. Free software, 3D Live mode. Choice of various transducers.  Possibility of using matrix transducers. Тransesophageal…'),
 (26, '2', '26.jpg', 'GREEN SOFTWARE & TECHNOLOGY is a leading customized software solutions provider for online and desktop based applications, established in 2014. The company has been promoted by some highly experienced, professional and dedicated team to provide total IT solutions under one roof.'),
-(28, '1', '28.jpg', 'GREEN Pathology Complex. No doubt the company has been able to make a name for itself in a relatively short span of time because of its ability and commitments.'),
-(29, '3', '29.jpg', 'It possesses not only the latest technology but also the most knowledgeable and secured hands to offer most user friendly customized solutions. Within these years of its operations, GREEN SOFTWARE & TECHNOLOGY has carved a niche for itself in the IT industry and has increased its business by acquiring some major international & domestic projects.');
+(28, '1', '28.jpg', 'GREEN Pathology Complex. No doubt the company has been able to make a name for itself in a relatively short span of time because of its ability and commitments.');
 
 -- --------------------------------------------------------
 
@@ -2492,7 +2681,8 @@ INSERT INTO `test_result` (`record_id`, `date`, `unique_id`, `patient_id`, `pati
 (29, '2020-07-12', 0, '278', 'Gias Uddin', '50 Yrs', 'Male', '', 'Dr. Md. Raziul Haque, [DMF(Dhaka)]', 'Biochemistry', 'HbA1c', 0, '2020-07-12'),
 (30, '2020-07-13', 0, '278', 'Gias Uddin', '50 Yrs', '', '', 'Md. Abdus Sattar Khan', 'Haematology', 'CBC with ESR', 0, '2020-07-13'),
 (31, '2020-07-14', 0, '277', 'Masud Rana', '45 Yrs', 'Male', '', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', 'Haematology', 'CBC with ESR', 0, '2020-07-14'),
-(32, '2020-07-14', 0, '277', 'Masud Rana', '45 Yrs', '', '', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', 'Haematology', 'CBC with ESR', 0, '2020-07-14');
+(32, '2020-07-14', 0, '277', 'Masud Rana', '45 Yrs', '', '', 'Dr.Md. Harun -Or-Rosid [MBBS,BCS(H), FCPS(ENT), P-1]', 'Haematology', 'CBC with ESR', 0, '2020-07-14'),
+(33, '2020-07-16', 0, '281', 'Test Patient', '25', 'Male', '', 'Dr.Md. Rukunuzzaman [MBBS,BCS(H), CCD(BIRDEM),CMU(Ultra)]', 'Haematology', 'Total Circulating Eosinophils', 0, '2020-07-16');
 
 -- --------------------------------------------------------
 
@@ -2528,9 +2718,36 @@ INSERT INTO `types_of_product` (`record_id`, `types_of_product`) VALUES
 (11, 'Test'),
 (12, 'HbA1c');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` varchar(255) NOT NULL,
+  `approval_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `role`, `approval_status`) VALUES
+(1, 'admin', 'abc12345', 'admin', 11);
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `about`
+--
+ALTER TABLE `about`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `add_bed`
@@ -2554,6 +2771,18 @@ ALTER TABLE `add_package`
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `admission_fee_invoice`
+--
+ALTER TABLE `admission_fee_invoice`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `admission_patient`
+--
+ALTER TABLE `admission_patient`
   ADD PRIMARY KEY (`record_id`);
 
 --
@@ -2707,6 +2936,12 @@ ALTER TABLE `enquiry`
   ADD PRIMARY KEY (`record_id`);
 
 --
+-- Indexes for table `expenditure`
+--
+ALTER TABLE `expenditure`
+  ADD PRIMARY KEY (`record_id`);
+
+--
 -- Indexes for table `expense`
 --
 ALTER TABLE `expense`
@@ -2800,6 +3035,36 @@ ALTER TABLE `medicine_name`
 -- Indexes for table `medicine_presentation`
 --
 ALTER TABLE `medicine_presentation`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `new_msg`
+--
+ALTER TABLE `new_msg`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `operation_category`
+--
+ALTER TABLE `operation_category`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `operation_details`
+--
+ALTER TABLE `operation_details`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `operation_equipment`
+--
+ALTER TABLE `operation_equipment`
+  ADD PRIMARY KEY (`record_id`);
+
+--
+-- Indexes for table `operation_name`
+--
+ALTER TABLE `operation_name`
   ADD PRIMARY KEY (`record_id`);
 
 --
@@ -3055,8 +3320,20 @@ ALTER TABLE `types_of_product`
   ADD PRIMARY KEY (`record_id`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `about`
+--
+ALTER TABLE `about`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `add_bed`
@@ -3075,6 +3352,18 @@ ALTER TABLE `add_package`
 --
 ALTER TABLE `admin`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `admission_fee_invoice`
+--
+ALTER TABLE `admission_fee_invoice`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `admission_patient`
+--
+ALTER TABLE `admission_patient`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `advance_payment`
@@ -3170,7 +3459,7 @@ ALTER TABLE `create_bank_name`
 -- AUTO_INCREMENT for table `create_bill`
 --
 ALTER TABLE `create_bill`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=229;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=231;
 
 --
 -- AUTO_INCREMENT for table `create_salary_sheet`
@@ -3225,6 +3514,12 @@ ALTER TABLE `doctor_schedule`
 --
 ALTER TABLE `enquiry`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `expenditure`
+--
+ALTER TABLE `expenditure`
+  MODIFY `record_id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `expense`
@@ -3311,6 +3606,36 @@ ALTER TABLE `medicine_presentation`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
+-- AUTO_INCREMENT for table `new_msg`
+--
+ALTER TABLE `new_msg`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `operation_category`
+--
+ALTER TABLE `operation_category`
+  MODIFY `record_id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `operation_details`
+--
+ALTER TABLE `operation_details`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `operation_equipment`
+--
+ALTER TABLE `operation_equipment`
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `operation_name`
+--
+ALTER TABLE `operation_name`
+  MODIFY `record_id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+
+--
 -- AUTO_INCREMENT for table `operation_report`
 --
 ALTER TABLE `operation_report`
@@ -3326,7 +3651,7 @@ ALTER TABLE `our_service`
 -- AUTO_INCREMENT for table `patient`
 --
 ALTER TABLE `patient`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=281;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
 
 --
 -- AUTO_INCREMENT for table `patient_admission`
@@ -3344,13 +3669,13 @@ ALTER TABLE `pay_service_due`
 -- AUTO_INCREMENT for table `pay_test_due`
 --
 ALTER TABLE `pay_test_due`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `photo_gallery`
 --
 ALTER TABLE `photo_gallery`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `prescription`
@@ -3404,7 +3729,7 @@ ALTER TABLE `report_crp_aso`
 -- AUTO_INCREMENT for table `report_haematology`
 --
 ALTER TABLE `report_haematology`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `report_immunology`
@@ -3494,7 +3819,7 @@ ALTER TABLE `sales_service`
 -- AUTO_INCREMENT for table `sales_test`
 --
 ALTER TABLE `sales_test`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=439;
 
 --
 -- AUTO_INCREMENT for table `sell_product`
@@ -3542,7 +3867,7 @@ ALTER TABLE `test_price`
 -- AUTO_INCREMENT for table `test_result`
 --
 ALTER TABLE `test_result`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `test_type`
@@ -3555,6 +3880,12 @@ ALTER TABLE `test_type`
 --
 ALTER TABLE `types_of_product`
   MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

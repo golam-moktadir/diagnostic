@@ -61,6 +61,9 @@ $user_type = $this->session->ses_user_type;
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>operation/operation-name"><i
                                                     class="fa fa-th text-green"></i>Operation Name</a></li>
+                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>operation/expenditure"><i
+                                                    class="fa fa-th text-yellow"></i>OT Expenditure</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <!--Create End-->
@@ -90,9 +93,9 @@ $user_type = $this->session->ses_user_type;
                                                     class="fa fa-th text-fuchsia"></i>Doctor Info</a>
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                            <a href="<?php echo base_url(); ?>admission">
+                                            <a href="<?php echo base_url(); ?>admission/">
                                                 <i class="fa fa-th text-yellow"></i>
-                                                <span>Operational Admission</span>
+                                                <span>Operation Case</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -118,9 +121,9 @@ $user_type = $this->session->ses_user_type;
                                             </a>
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                            <a href="<?php echo base_url(); ?>admission/operation-invoice">
+                                            <a href="<?php echo base_url(); ?>admission/admission-invoice">
                                                 <i class="fa fa-th text-red"></i>
-                                                <span>Operation Invoice</span>
+                                                <span>Admission Invoice</span>
                                             </a>
                                         </li>
                                     <!--

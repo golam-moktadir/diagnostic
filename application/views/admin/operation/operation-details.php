@@ -5,18 +5,18 @@
                 <div style="color: black; background: #a6d7ff; padding: 8px; border: 2px solid #055d9c; margin-bottom:5px;" class="no_print">
                     <form action="<?php echo base_url().'admission/operation-create-invoice'?>" method='post'>
                     <div class="box-body">
-                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;">Operation Invoice</p>
+                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;">Operation Details</p>
                         <h3 class="text-center text-danger"><?php echo $this->session->flashdata('error') ?></h3>
                         <h3 class="text-center text-success"><?php echo $this->session->flashdata('success') ?></h3>
                         <div class="row">
                             <div class="form-group col-sm-3 col-xs-12">
-                                <label for="patient_id">Patient Name</label>
-                                <select name="patient_id" id="patient_id" class="form-control selectpicker">
+                                <label for="admission_id">Operation Invoice</label>
+                                <select name="admission_id" id="admission_id" class="form-control selectpicker" data-container="body">
                                     <option value="">--Select--</option>
                                     <?php 
-                                        foreach ($all_patient as $info) { ?>
-                                            <option value="<?php echo $info->patient_id ?>">
-                                                <?php echo "$info->name [ID: $info->patient_id]"; ?>
+                                        foreach ($invoices as $info) { ?>
+                                            <option value="<?php echo $info->admission_id ?>">
+                                                <?php echo "$info->name [ Invoice -- $info->record_id" ?>
                                             </option>
                                     <?php } ?>
                                 </select>
@@ -24,84 +24,20 @@
                             <!--Patient Name Add and Insert New-->
                         <div id="info">
                             <div class="form-group col-sm-3 col-xs-12">
-                                <label for="mobile">Mobile No.</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control" disabled="">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="age">Age</label>
-                                <input type="text" class="form-control" id="age" name="age" disabled="">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="address">Address</label>
-                                <input type="text" class="form-control" id="address"
-                                       value="" placeholder="" name="address" disabled="">
-                            </div>
-
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="record_id">Operation Name</label>
-                                <select name="record_id" id="record_id" class="form-control" data-container="body">
-                                    <option value="">-- Select --</option>
-                                    
-                                </select>
+                                <label for="operation_id">Operation Name</label>
+                                <input  name="operation_id" id="operation_id" class="form-control">                              
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="doctor_id">Surgeon  Name</label>
-                                <select name="doctor_id" id="doctor_id" class="form-control selectpicker" data-container="body">
-                                    <option value="">-- Select --</option>
-                                    
-                                </select>
+                                <input type="text" name="doctor_id" id="doctor_id" class="form-control">
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="anesthesia_id">Anesthesia</label>
-                                <select name="anesthesia_id" id="anesthesia_id" class="form-control selectpicker" data-container="body">
-                                    <option value="">-- Select --</option>
-                                    
-                                </select>
+                                <input type="text" name="anesthesia_id" id="anesthesia_id" class="form-control">
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
-                                <label for="date">Diagnosis</label>
-                                <select class="form-control selectpicker" id="diagnosis"
-                                       data-container="body" name="diagnosis">
-                                       <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="date">Relation with Patient</label>
-                                <select class="form-control selectpicker" id="relation"
-                                       data-container="body" name="relation">
-                                       <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="admission_date">Admission Date</label>
-                                <select class="form-control selectpicker" id="admission_date"
-                                       data-container="body" name="admission_date">
-                                       <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="operation_date">Operation Date</label>
-                                <select class="form-control selectpicker" id="operation_date"
-                                       data-container="body" name="operation_date">
-                                       <option value="">-- Select --</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="operation_price">Operation Price</label>
-                                <input type="number" name="operation_price" class="form-control" placeholder="Enter Operation Price" id="operation_price">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="advance_fee">Advance Paid</label>
-                                <input type="number" class="form-control" placeholder="Enter Advance Fee">
-                                <input type="hidden" name="advance_fee">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="payable_amount">Amount to be Paid</label>
-                                <input type="number" class="form-control" placeholder="Enter Amount Fee" name="payable_amount" id="payable_amount">
-                            </div>
-                            <div class="form-group col-sm-3 col-xs-12">
-                                <label for="discount">Discount</label>
-                                <input type="number" name="discount" class="form-control" id="discount" placeholder="Enter Discount amount">
+                                <label for="diagnosis">Diagnosis</label>
+                                <input class="form-control" id="diagnosis" name="diagnosis">
                             </div>
                         </div>
 
@@ -169,12 +105,12 @@
 </aside>
 
 <script type="text/javascript">
-    $("#patient_id").change(function(){
-        var patient_id = $(this).val();
+    $("#admission_id").change(function(){
+        var admission_id = $(this).val();
         $.ajax({
-            url:"<?php echo base_url().'AdmissionController/patientAdmissionInfo' ?>",
+            url:"<?php echo base_url().'OperationController/getInvoiceIndividual' ?>",
             type:'post',
-            data:{patient_id:patient_id},
+            data:{admission_id:admission_id},
             success:function(response){
                 $("#info").empty().html(response);  
               //  console.log(response);   

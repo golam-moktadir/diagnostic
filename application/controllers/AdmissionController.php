@@ -14,7 +14,7 @@ class AdmissionController extends CI_Controller
 	}
 	public function index(){
         $data['admit_patients'] = $this->Join_model->admitPatients();
-        $data['all_patient'] = $this->Common_model->get_all_info_orderby('patient', 'record_id', 'DESC');
+        $data['all_patient'] = $this->Join_model->admissionInvoice();
         $data['all_doctor'] = $this->Common_model->get_all_info_orderby('doctor', 'record_id', 'DESC');
         $data['categories'] = $this->Common_model->get_all_info_orderby('operation_category', 'record_id', 'DESC');
 
@@ -22,19 +22,37 @@ class AdmissionController extends CI_Controller
 		$this->load->view('admin/admission/admission-new',$data);
 		$this->load->view('admin/footer');
 	}
+	public function getSinglePatientAdmitInfo(){
+		$value = $this->Join_model->getSinglePatientAdmitInfo($this->input->post('patient_id'));
+		echo json_encode($value);
+	}
 	public function getOperationName(){
 		$category_id = $this->input->post('category_id');
 		$names = $this->Common_model->get_all_info_by_array('operation_name',['category_id' => $category_id]);
-		$data = $this->load->view('admin/admission/get-operation-name',['names' => $names],true);
-		echo $data;
+        $data = "<option value=''>-- Select --</option>";
+      	foreach($names as $name){
+      	$data .= "<option value='$name->record_id'>$name->operation_name</option>";	
+      	}                              
+		echo json_encode($data);
+	}
+	public function getOperationPrice(){
+		$operation_id = $this->input->post('operation_id');
+		$data = $this->Common_model->single_row(['record_id' => $operation_id], 'operation_name');
+		echo json_encode($data);
 	}
 	public function createAdmission(){
 
-		if($this->input->post('operation_id') == 0){
-			$this->session->set_flashdata('error','Please select Operation Name');
-			redirect(base_url().'admission/');
+		$value = $this->Common_model
+					  ->single_row(['admit_id' => $this->input->post('admit_id'),
+					  				'operation_id' => $this->input->post('operation_id')
+					  			   ],
+					  			   'admission_patient');
+		if(isset($value->admit_id)){
+			$this->session->set_flashdata('error','Already Inserted');
+			redirect(base_url().'admission');
 		}
 		$data = [
+				'admit_id' => $this->input->post('admit_id'),
 				'patient_id' => $this->input->post('patient_id'),
 				'category_id' => $this->input->post('category_id'),
 				'operation_id' => $this->input->post('operation_id'),
@@ -42,9 +60,7 @@ class AdmissionController extends CI_Controller
 				'anesthesia_id' => $this->input->post('anesthesia_id'),
 				'diagnosis' => $this->input->post('diagnosis'),
 				'relation' => $this->input->post('relation'),
-				'admission_date' => $this->input->post('admission_date'),
 				'operation_date' => $this->input->post('operation_date'),
-				'advance_fee' => $this->input->post('advance_fee')
 			];
 		$this->Common_model->insert_data('admission_patient', $data);
 		$this->session->set_flashdata('success','Inserted Successfully');
@@ -62,10 +78,7 @@ class AdmissionController extends CI_Controller
 		$this->load->view('admin/footer');
 	}
 	public function updateAdmission(){
-		if($this->input->post('operation_id') == 0){
-			$this->session->set_flashdata('error','Please select Operation Name');
-			redirect(base_url().'admission/');
-		}
+
 		$data = [
 				'category_id' => $this->input->post('category_id'),
 				'operation_id' => $this->input->post('operation_id'),
@@ -73,7 +86,6 @@ class AdmissionController extends CI_Controller
 				'anesthesia_id' => $this->input->post('anesthesia_id'),
 				'diagnosis' => $this->input->post('diagnosis'),
 				'relation' => $this->input->post('relation'),
-				'admission_date' => $this->input->post('admission_date'),
 				'operation_date' => $this->input->post('operation_date'),
 				'advance_fee' => $this->input->post('advance_fee')
 			];
@@ -81,93 +93,145 @@ class AdmissionController extends CI_Controller
 		$this->session->set_flashdata('success','Updated Successfully');
 		redirect(base_url().'admission');		
 	}
-	public function operationInvoice(){
-        $data['invoices'] = $this->Join_model->operationInvoice();
-        $data['all_patient'] = $this->Join_model->admitPatientUnique();
+	public function admissionInvoice(){
+        $data['invoices'] = $this->Join_model->admissionInvoice();
+        $data['all_patient'] = $this->Common_model->get_all_info_orderby('patient','record_id','desc');
 
 		$this->load->view('admin/header');
-		$this->load->view('admin/admission/operation-invoice',$data);
+		$this->load->view('admin/admission/admission-invoice',$data);
+		$this->load->view('admin/footer');			
+	}
+	public function admissionCreateInvoice(){
+		$value = $this->Common_model
+					  ->single_row(['patient_id' => $this->input->post('patient_id')],'admission_fee_invoice');
+		if(isset($value->patient_id)){
+			$this->session->set_flashdata('error','This ID Already Admitted');
+			redirect(base_url().'admission/admission-invoice');			
+		}
+		$data = [
+				'patient_id' => $this->input->post('patient_id'),
+				'admission_fee' => $this->input->post('admission_fee'),
+				'advance_amount' => $this->input->post('advance_amount')
+			];
+		$this->Common_model->insert_data('admission_fee_invoice', $data);
+		$this->session->set_flashdata('success','Inserted Successfully');
+		redirect(base_url().'admission/admission-invoice');
+	}
+	public function operationdetails(){
+        $data['admit_patients'] = $this->Join_model->admissionInvoice();
+        $data['categories'] = $this->Common_model->get_all_info_orderby('operation_category', 'record_id', 'DESC');
+        $data['all_doctor'] = $this->Common_model->get_all_info_orderby('doctor', 'record_id', 'DESC');
+        $data['expenditures'] = $this->Common_model->get_all_info('expenditure');
+        $data['invoices'] = $this->Join_model->operationdetails();
+
+		$this->load->view('admin/header');
+		$this->load->view('admin/admission/operation-details',$data);
 		$this->load->view('admin/footer');		
 	}
-	public function editOperationInvoice($admission_id){
-        $data['invoices'] = $this->Join_model->operationInvoice();
-    //    $data['all_patient'] = $this->Join_model->admitPatientUnique();
-		$data['invoice'] =  $this->Join_model->invoiceIndividual($admission_id);
+	public function getExpenditureRate(){
+		$record_id = $this->input->post('record_id');
+		$value = $this->Common_model->single_row(['record_id' => $record_id],'expenditure');
+		echo json_encode($value);
+	}
+	public function operationDetailsInvoice(){
+		$operation_price = $this->input->post('operation_price');
+		$total_expenditure_price = $this->input->post('total_expenditure_price');
+		$discount = $this->input->post('discount');
+		$total_price = $operation_price + $total_expenditure_price;
+		$sub_total = $total_price - $discount;
+		$payable_amount = $this->input->post('payable_amount');
+		$due = $operation_price + $total_expenditure_price - ($payable_amount + $discount);
 
+		$data = [
+				'patient_id' => $this->input->post('patient_id'),
+				'category_id' => $this->input->post('category_id'),
+				'operation_id' => $this->input->post('operation_id'),
+				'doctor_id' => $this->input->post('doctor_id'),
+				'anesthesia_id' => $this->input->post('anesthesia_id'),
+				'diagnosis' => $this->input->post('diagnosis'),
+				'operation_date' => $this->input->post('operation_date'),
+				'operation_price' => $operation_price,
+				'total_price' => $total_price,
+				'sub_total' => $sub_total,
+				'payable_amount' => $payable_amount,
+				'discount' => $discount,
+				'due' => $due
+			];	
+		$invoice_id = $this->Common_model->insert_data('operation_details', $data);
+		$expenditure_id = $this->input->post('expenditure_id');
+		$new_expenditure_price = $this->input->post('new_expenditure_price');
+		for($i = 0; $i < count($expenditure_id); $i++){
+       		$this->db->insert('operation_equipment', [
+       												'invoice_id' => $invoice_id,
+       												'expenditure_id' => $expenditure_id[$i],
+       												'new_expenditure_price' => $new_expenditure_price[$i]
+       												]);
+		}
+		$this->session->set_flashdata('success','Invoice Successfully Inserted');
+		redirect(base_url().'admission/operation-details');	
+	}
+	public function editOperationDetails($record_id,$category_id){
+        $data['admit_patients'] = $this->Join_model->admissionInvoice();
+        $data['categories'] = $this->Common_model->get_all_info_orderby('operation_category', 'record_id', 'DESC');
+        $data['operations'] = $this->Common_model->get_all_info_by_array('operation_name',['category_id' => $category_id]);
+        $data['all_doctor'] = $this->Common_model->get_all_info_orderby('doctor', 'record_id', 'DESC');
+        $data['expenditures'] = $this->Common_model->get_all_info('expenditure');
+		$data['invoice'] =  $this->Common_model->single_row(['record_id' => $record_id],'operation_details');
+        $data['equipments'] = $this->Join_model->equipments($record_id);
+        $data['invoices'] = $this->Join_model->operationdetails();
+   	
 		$this->load->view('admin/header');
-		$this->load->view('admin/admission/edit-operation-invoice',$data);
+		$this->load->view('admin/admission/edit-operation-details',$data);
 		$this->load->view('admin/footer');	
 	}
-	public function updateOperationInvoice(){
-		$advance_fee = $this->input->post('advance_fee');
-		$payable_amount = $this->input->post('payable_amount');
-		$discount = $this->input->post('discount');
+	public function updateOperationDetails($record_id){
 		$operation_price = $this->input->post('operation_price');
-		$due = $operation_price - ($advance_fee + $payable_amount + $discount);	
-
-	//	echo $operation_price;exit;
-		if($operation_price < $advance_fee){
-			$this->session->set_flashdata('error','Advance amount can not be larger than operation price');
-			redirect(base_url().'admission/edit-operation-invoice/'.$this->input->post('admission_id'));			
-		}
-		else if($due < 0){
-			$this->session->set_flashdata('error','Payable amount is exced than operation price');
-			redirect(base_url().'admission/edit-operation-invoice/'.$this->input->post('admission_id'));			
-		}			
-		$data = [
-				'operation_price' => $operation_price,
-				'discount' => $discount,
-				'payable_amount' => $payable_amount,
-				'due' => $due
-			];	
-		$this->Common_model->update_data_onerow('operation_invoice', $data,'admission_id', $this->input->post('admission_id'));
-		$this->session->set_flashdata('success','Invoice Successfully Updated');
-		redirect(base_url().'admission/operation-invoice');	
-	}
-	public function patientAdmissionInfo(){
-		$patient_id = $this->input->post('patient_id');
-		$data['patient'] = $this->Common_model->single_row(['record_id' => $patient_id],'patient');
-		$data['patients'] = $this->Join_model->patientAdmissionInfo($patient_id);		
-		$value = $this->load->view('admin/admission/patient-admission-info', $data, true);
-		echo $value;
-	}
-	public function patientAdmissionAnotherInfo(){
-		$data['patient'] = $this->Join_model->patientAdmissionAnotherInfo($this->input->post('record_id'));
-		$value = $this->load->view('admin/admission/patient-admission-another-info', $data, true);
-		echo $value;
-	}
-	public function operationCreateInvoice(){
-		$advance_fee = $this->input->post('advance_fee');
-		$payable_amount = $this->input->post('payable_amount');
+		$total_expenditure_price = $this->input->post('total_expenditure_price');
 		$discount = $this->input->post('discount');
-		$operation_price = $this->input->post('operation_price');
-		$due = $operation_price - ($advance_fee + $payable_amount + $discount);
-
-		$value = $this->Common_model->single_row(['admission_id' => $this->input->post('record_id')],'operation_invoice');
-
-		if(isset($value->admission_id)){
-			$this->session->set_flashdata('error','Already Taken Invoice');
-			redirect(base_url().'admission/operation-invoice');			
-		}
-		else if($operation_price < $advance_fee){
-			$this->session->set_flashdata('error','Advance amount can not be larger than operation price');
-			redirect(base_url().'admission/operation-invoice');			
-		}
-		else if($due < 0){
-			$this->session->set_flashdata('error','Payable amount is exced than operation price');
-			redirect(base_url().'admission/operation-invoice');			
-		}		
+		$total_price = $operation_price + $total_expenditure_price;
+		$sub_total = $total_price - $discount;
+		$payable_amount = $this->input->post('payable_amount');
+		$due = $operation_price + $total_expenditure_price - ($payable_amount + $discount);
+			
 		$data = [
-				'admission_id' => $this->input->post('record_id'),
 				'patient_id' => $this->input->post('patient_id'),
+				'category_id' => $this->input->post('category_id'),
+				'operation_id' => $this->input->post('operation_id'),
+				'doctor_id' => $this->input->post('doctor_id'),
+				'anesthesia_id' => $this->input->post('anesthesia_id'),
+				'diagnosis' => $this->input->post('diagnosis'),
+				'operation_date' => $this->input->post('operation_date'),
 				'operation_price' => $operation_price,
-				'discount' => $discount,
+				'total_price' => $total_price,
+				'sub_total' => $sub_total,
 				'payable_amount' => $payable_amount,
+				'discount' => $discount,
 				'due' => $due
 			];	
-		$this->Common_model->insert_data('operation_invoice', $data);
-		$this->session->set_flashdata('success','Invoice Successfully Inserted');
-		redirect(base_url().'admission/operation-invoice');	
+		$this->Common_model->update_data_onerow('operation_details', $data,'record_id', $record_id);
+		$this->Common_model->delete_info('invoice_id', $record_id, 'operation_equipment');
+
+		$expenditure_id = $this->input->post('expenditure_id');
+		$new_expenditure_price = $this->input->post('new_expenditure_price');
+		for($i = 0; $i < count($expenditure_id); $i++){
+       		$this->db->insert('operation_equipment', [
+       												'invoice_id' => $record_id,
+       												'expenditure_id' => $expenditure_id[$i],
+       												'new_expenditure_price' => $new_expenditure_price[$i]
+       												]);
+		}
+
+
+		$this->session->set_flashdata('success','Invoice Successfully Updated');
+		redirect(base_url().'admission/operation-details');	
+	}
+	public function invoiceIndividual($record_id){
+		$data['invoice'] =  $this->Join_model->invoiceIndividual($record_id);
+        $data['equipments'] = $this->Join_model->equipments($record_id);
+		
+		$this->load->view('admin/header');
+		$this->load->view('admin/admission/invoice-individual',$data);
+		$this->load->view('admin/footer');			
 	}
 }
 ?>

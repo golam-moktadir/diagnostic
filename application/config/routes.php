@@ -61,15 +61,19 @@ $route['operation/operation-name'] = 'OperationController/operationName';
 $route['operation/create-operation-name'] = 'OperationController/createOperationName';
 $route['operation/edit-operation-name/(:any)'] = 'OperationController/editOperationName/$1';
 $route['operation/delete-operation-name/(:any)'] = 'OperationController/deleteOperationName/$1';
+$route['operation/expenditure'] = 'OperationController/expenditure';
+$route['operation/create-expenditure'] = 'OperationController/createExpenditure';
 //Patient Admission
 $route['admission'] = 'AdmissionController/index';
 $route['admission/create-admission'] = 'AdmissionController/createAdmission';
 $route['admission/edit-admission/(:any)/(:any)'] = 'AdmissionController/editAdmission/$1/$2';
 $route['admission/update-admission'] = 'AdmissionController/updateAdmission';
-$route['admission/operation-invoice'] = 'AdmissionController/operationInvoice';
-$route['admission/edit-operation-invoice/(:any)'] = 'AdmissionController/editOperationInvoice/$1';
-$route['admission/update-operation-invoice'] = 'AdmissionController/updateOperationInvoice';
-$route['admission/operation-create-invoice'] = 'AdmissionController/operationCreateInvoice';
+$route['admission/admission-invoice'] = 'AdmissionController/admissionInvoice';
+$route['admission/admission-create-invoice'] = 'AdmissionController/admissionCreateInvoice';
+$route['admission/operation-details'] = 'AdmissionController/operationDetails';
+$route['admission/edit-operation-details/(:any)/(:any)'] = 'AdmissionController/editOperationDetails/$1/$2';
+$route['admission/update-operation-details/(:any)'] = 'AdmissionController/updateOperationDetails/$1';
+$route['admission/operation-details-invoice'] = 'AdmissionController/operationDetailsInvoice';
 $route['admission/patient-admission-info'] = 'AdmissionController/patientAdmissionInfo';
 //Invoice Individual
-$route['operation/invoice-individual/(:any)'] = 'OperationController/invoiceIndividual/$1';
+$route['admission/invoice-individual/(:any)'] = 'AdmissionController/invoiceIndividual/$1';

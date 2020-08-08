@@ -156,8 +156,8 @@ class Common_model extends CI_Model {
     }
 
     function insert_data($table_name, $data) {
-        $query = $this->db->insert($table_name, $data);
-        return $query;
+        $this->db->insert($table_name, $data);
+        return $this->db->insert_id();
     }
 
     function update_data_all_column($table_name, $data) {

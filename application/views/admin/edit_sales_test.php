@@ -247,8 +247,7 @@
         product_count--;
         calculation();
     }
-
-    function show_added_table() {
+    function show_added_table(){
         var full_table = "";
         var test_total = 0;
         for (var i = 0; i < all_purchase.length; i++) {
