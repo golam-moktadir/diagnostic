@@ -24,53 +24,33 @@
         <div class="row">
             <section class="col-xs-12 connectedSortable" id="full_page">
                 <div style="color: black; background: #a6d7ff; padding: 8px; border: 2px solid #055d9c; margin-bottom:5px;" class="no_print">
-                    <form action="<?php echo base_url().'Insert/appointment' ?>" method='post'>
+                    <form action="<?php echo base_url().'Edit/appointment/'.$appointment->record_id.'/'.$patient->record_id ?>" method='post'>
                     <div class="box-body">
-                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;">Doctor Appointment</p>
-                        <h5 class="text-center text-success"><?php echo $this->session->flashdata('success') ?></h5>
+                        <p style="font-size: 20px; color: green; font-weight: bold; text-align: center;"> Edit Doctor Appointment</p>
                         <div class="row">
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="patient_id">Patient Name</label>
-                                <div class="input-group">
-                                    <select name="patient_id" id="patient_id" class="form-control selectpicker"
-                                            data-live-search="true">
-                                        <option value="">--Select--</option>
-                                        <?php foreach ($all_patient as $info) { ?>
-                                            <option value="<?php echo $info->record_id ?>">
-                                                <?php echo "$info->name [ID: $info->record_id]"; ?>
-                                            </option>
-                                        <?php } ?>
-                                    </select>
-                                    <input type="text" class="form-control" id="new_patient"
-                                           placeholder="New Patient Name"
-                                           name="patient_name" style="display: none">
-                                    <span class="input-group-addon">
-                                        <button type="button" id="c_plus" style="height: 20px;"
-                                                class="btn btn-success fa fa-plus-square btn-sm"></button>
-                                        <button type="button" id="c_back" style="height: 20px; display:none;"
-                                                class="btn btn-info fa fa-backward btn-sm"></button>
-                                    </span>
-                                </div>
+                                <input type="text" class="form-control" id="new_patient" value="<?php echo $patient->name ?>" name="name">
                             </div> 
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="mobile">Mobile No.</label>
-                                <input type="text" name="mobile" id="mobile" class="form-control">
+                                <input type="text" name="mobile" id="mobile" class="form-control" value="<?php echo $patient->mobile ?>">
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="age">Age</label>
-                                <input type="text" class="form-control" id="age" name="age">
+                                <input type="text" class="form-control" id="age" name="age" value="<?php echo $patient->age ?>">
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="address">Address</label>
                                 <input type="text" class="form-control" id="address"
-                                       value="" placeholder="" name="address">
+                                       placeholder="" name="address" value="<?php echo $patient->address ?>">
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="doctor_id">Doctor Name</label>
                                 <select name="doctor_id" id="doctor_id" class="form-control selectpicker" data-container="body">
                                     <option value="">-- Select --</option>
                                     <?php foreach ($all_doctor as $info) { ?>
-                                        <option value="<?php echo $info->record_id ?>">
+                                        <option <?php if($appointment->doctor_id == $info->record_id) echo 'selected' ?> value="<?php echo $info->record_id ?>">
                                             <?php
                                                 echo $info->name .
                                                 " [" . $info->designation . "]";
@@ -81,23 +61,22 @@
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="doctor_fee">Doctor Fee</label>
-                                <input type="text" class="form-control" id="doctor_fee" placeholder=""
+                                <input type="text" class="form-control" id="doctor_fee" value="<?php echo $appointment->doctor_fee ?>"
                                        name="doctor_fee">
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="date">Appointment Date</label>
                                 <input type="text" class="form-control new_datepicker" id="date"
-                                       value="<?php echo date('Y-m-d'); ?>" placeholder="Date" name="date">
+                                       value="<?php echo $appointment->date ?>" name="date">
                             </div>
                             <div class="form-group col-sm-4 col-xs-12">
                                 <label for="appointment_time">Appointment Time</label>
-                                <input type="time" class="form-control" id="appointment_time" placeholder=""
-                                       name="appointment_time">
+                                <input type="time" class="form-control" id="appointment_time" value="<?php echo $appointment->appointment_time ?>" name="appointment_time">
                             </div>
                         </div>
                     </div>
                     <div class="box-footer clearfix">
-                        <button type="submit" class="pull-left btn btn-success" id="submit">Submit <i
+                        <button type="submit" class="pull-left btn btn-success" id="submit">Update <i
                                 class="fa fa-arrow-circle-right"></i></button>
                     </div>
                     </form>
@@ -201,6 +180,7 @@
 <script type="text/javascript">
 
     var c_status = 0;
+
     $('#c_plus').on('click', function () {
         $('#patient_id').selectpicker('hide');
         $('#new_patient').show();
@@ -212,6 +192,8 @@
         $('#address').val('');
         c_status = 1;
     });
+
+
     $('#c_back').on('click', function () {
         $('#patient_id').selectpicker('show');
         $('#new_patient').hide();
@@ -223,30 +205,42 @@
     });
 //    Add and Insert Patient End
     $("#patient_id").on("change paste keyup", function () {
-        var patient_id = $('#patient_id').val();
+        var patient = $('#patient_id').val().split("###");
+        var patient_id = patient[0];
+        var patient_name = patient[1];
+        var post_data = {
+            'patient_id': patient_id,
+            '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+        };
 
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url().'AdmissionController/patientBasicInfo' ?>",
-            data: {patient_id:patient_id},
+            url: "<?php echo base_url(); ?>Get_ajax_value/get_patient_age_mobile_address",
+            data: post_data,
             dataType: 'json',
-            success: function (response) {
-                $('#age').val(response.age);
-                $('#mobile').val(response.mobile);
-                $('#address').val(response.address);
+            success: function (data) {
+                $('#age').val(data[0]);
+                $('#mobile').val(data[1]);
+                $('#address').val(data[2]);
             }
         });
     });
 
-    $("#doctor_id").on("change paste keyup", function () {
-        var doctor_id = $('#doctor_id').val();
+    $("#doctor_name").on("change paste keyup", function () {
+        var doctor = $('#doctor_name').val().split("###");
+        var doctor_name = doctor[0];
+        var post_data = {
+            'doctor_name': doctor_name,
+            '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+        };
+
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url(); ?>ProductController/getDoctorFee",
+            url: "<?php echo base_url(); ?>Get_ajax_value/get_doctor_fee",
             dataType: 'json',
-            data:{doctor_id:doctor_id},
-            success: function (response) {
-               $("#doctor_fee").val(response.frees);
+            data: post_data,
+            success: function (data) {
+                $('#doctor_fee').val(data[0]);
             }
         });
     });
@@ -268,21 +262,39 @@
     });
 
     $("#submit").click(function () {
-      //  event.preventDefault();
+
+        var date = $('#date').val();
         if (c_status == 1) {
+            var patient_id = "";
             var patient_name = $('#new_patient').val();
-            if(patient_name.length == 0){
-                alert('Patient Name Can not be empty');
-                return false;
-            }
+        } else {
+            var patient = $('#patient_id').val().split("###");
+            var patient_id = patient[0];
+            var patient_name = patient[1];
         }
-        else{
-            var patient_id = $('#patient_id').val();
-            if(patient_id.length == 0){
-                alert('Please Select A Patient Name');
-                return false;
+        var doctor = $('#doctor_name').val().split("###");
+        var doctor_name = doctor[0];
+        var doctor_designation = doctor[1];
+
+        var age = $('#age').val();
+        var mobile = $('#mobile').val();
+        var address = $('#address').val();
+        var doctor_fee = $('#doctor_fee').val();
+        var appointment_time = $('#appointment_time').val();
+
+        var post_data = {
+            'date': date, 'patient_id': patient_id, 'patient_name': patient_name, 'doctor_designation': doctor_designation, 'doctor_name': doctor_name, 'age': age,
+            'address': address, 'doctor_fee': doctor_fee, 'appointment_time': appointment_time, 'mobile': mobile, 'c_status': c_status,
+            '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
+        };
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url(); ?>Get_ajax_value/appointment_confirm",
+            data: post_data,
+            success: function (data) {
+                window.location.replace("<?php echo base_url(); ?>Show_form/appointment/created");
             }
-        }        
+        });
     });
 
 

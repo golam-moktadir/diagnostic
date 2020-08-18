@@ -48,10 +48,10 @@ $user_type = $this->session->ses_user_type;
                                        data-toggle="dropdown">Create<span class="caret"></span></a>
                                     <ul class="dropdown-menu">
 
-                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/types_of_product/main"><i
+                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>product/category"><i
                                                     class="fa fa-th text-blue"></i>Product Category</a>
                                         </li>
-                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/product_name/main"><i
+                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>product/product"><i
                                                     class="fa fa-th text-yellow"></i>Product Name</a>
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/designation/main"><i
@@ -78,7 +78,7 @@ $user_type = $this->session->ses_user_type;
                                                     class="fa fa-th text-red"></i>Patient Info.</a>
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                            <a href="<?php echo base_url(); ?>Show_form/appointment/main">
+                                            <a href="<?php echo base_url(); ?>Show_form/appointment">
                                                 <i class="fa fa-th text-green"></i>
                                                 <span>Appointment</span>
                                             </a>
@@ -91,12 +91,6 @@ $user_type = $this->session->ses_user_type;
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/create_doctor/main"><i
                                                     class="fa fa-th text-fuchsia"></i>Doctor Info</a>
-                                        </li>
-                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                            <a href="<?php echo base_url(); ?>admission/">
-                                                <i class="fa fa-th text-yellow"></i>
-                                                <span>Operation Case</span>
-                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -115,15 +109,15 @@ $user_type = $this->session->ses_user_type;
                                             </a>
                                         </li>
                                         <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                            <a href="<?php echo base_url(); ?>Show_form/pay_test_due/main">
-                                                <i class="fa fa-th text-yellow"></i>
-                                                <span>Due Collection</span>
-                                            </a>
-                                        </li>
-                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
                                             <a href="<?php echo base_url(); ?>admission/admission-invoice">
                                                 <i class="fa fa-th text-red"></i>
                                                 <span>Admission Invoice</span>
+                                            </a>
+                                        </li>
+                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
+                                            <a href="<?php echo base_url(); ?>Show_form/pay_test_due/main">
+                                                <i class="fa fa-th text-yellow"></i>
+                                                <span>Due Collection</span>
                                             </a>
                                         </li>
                                     <!--
@@ -145,6 +139,12 @@ $user_type = $this->session->ses_user_type;
                                                 <span>Patient Ledger</span>
                                             </a>
                                         </li>
+                                        <li class="dropdown-submenu" style="margin: 5px; font-size: 15px; text-align: left;">
+                                            <a href="<?php echo base_url(); ?>admission/operation-details">
+                                                <i class="fa fa-th text-yellow"></i>
+                                                <span>Operation Details</span>
+                                            </a>
+                                        </li> 
                                     </ul>
                                 </div>
                                 <!--Billing End-->
@@ -374,10 +374,10 @@ $user_type = $this->session->ses_user_type;
                                            data-toggle="dropdown">Create<span class="caret"></span></a>
                                         <ul class="dropdown-menu">
 
-                                            <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/types_of_product/main"><i
+                                            <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>product/category"><i
                                                         class="fa fa-angle-double-right text-red"></i> Product Category</a>
                                             </li>
-                                            <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>Show_form/product_name/main"><i
+                                            <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;"><a href="<?php echo base_url(); ?>product/product"><i
                                                         class="fa fa-angle-double-right text-red"></i> Product Name</a>
                                             </li>
 
@@ -449,7 +449,7 @@ $user_type = $this->session->ses_user_type;
                                                         class="fa fa-angle-double-right text-blue"></i>Insert Patient Info.</a>
                                             </li>
                                             <li class="dropdown-submenu" style="margin: 5px; font-size: 16px; text-align: left;">
-                                                <a href="<?php echo base_url(); ?>Show_form/appointment/main">
+                                                <a href="<?php echo base_url(); ?>Show_form/appointment">
                                                     <i class="fa fa-angle-double-right text-green"></i>
                                                     <span>Appointment</span>
                                                 </a>

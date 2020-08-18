@@ -73,7 +73,7 @@
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="appointment_time">Operation Date</label>
-                                <input type="text" class="form-control new_datepicker" id="operation_date" name="operation_date">
+                                <input type="text" class="form-control new_datepicker" id="operation_date" name="operation_date" value="<?php echo date('Y-m-d') ?>">
                             </div>
                             <div class="form-group col-sm-3 col-xs-12">
                                 <label for="expenditure_title">OT Expenditure</label>
@@ -162,7 +162,7 @@
                                             </a>
                                             <a href="<?php echo base_url().'admission/invoice-individual/'.$single_value->record_id ?>" class="btn btn-sm btn-info" title='Invoice'><i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="<?php echo base_url(); ?>Delete/appointment/<?php echo $single_value->record_id; ?>" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i>
+                                            <a href="<?php echo base_url(); ?>admission/delete-operation-details/<?php echo $single_value->record_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you Sure ?')"><i class="fa fa-trash-o"></i>
                                             </a>
                                         </td>
                                     </tr>

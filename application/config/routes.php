@@ -53,6 +53,13 @@ $route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+$route['product/category'] = 'ProductController/category';
+$route['product/create-product-category'] = 'ProductController/createProductCategory';
+$route['product/edit-category/(:any)'] = 'ProductController/editCategory/$1';
+$route['product/edit-product-name/(:any)'] = 'ProductController/editProductName/$1';
+$route['product/product'] = 'ProductController/product';
+$route['product/create-product'] = 'ProductController/createProduct';
+
 $route['operation/category'] = 'OperationController/category';
 $route['operation/create-category'] = 'OperationController/createCategory';
 $route['operation/edit-category/(:any)'] = 'OperationController/editCategory/$1';
@@ -63,17 +70,24 @@ $route['operation/edit-operation-name/(:any)'] = 'OperationController/editOperat
 $route['operation/delete-operation-name/(:any)'] = 'OperationController/deleteOperationName/$1';
 $route['operation/expenditure'] = 'OperationController/expenditure';
 $route['operation/create-expenditure'] = 'OperationController/createExpenditure';
+$route['operation/edit-expenditure/(:any)'] = 'OperationController/editExpenditure/$1';
+$route['operation/delete-expenditure/(:any)'] = 'OperationController/deleteExpenditure/$1';
 //Patient Admission
-$route['admission'] = 'AdmissionController/index';
-$route['admission/create-admission'] = 'AdmissionController/createAdmission';
-$route['admission/edit-admission/(:any)/(:any)'] = 'AdmissionController/editAdmission/$1/$2';
-$route['admission/update-admission'] = 'AdmissionController/updateAdmission';
+//$route['admission'] = 'AdmissionController/index';
+//$route['admission/create-admission'] = 'AdmissionController/createAdmission';
+//$route['admission/edit-admission/(:any)/(:any)'] = 'AdmissionController/editAdmission/$1/$2';
+//$route['admission/update-admission'] = 'AdmissionController/updateAdmission';
 $route['admission/admission-invoice'] = 'AdmissionController/admissionInvoice';
 $route['admission/admission-create-invoice'] = 'AdmissionController/admissionCreateInvoice';
+$route['admission/edit-admission-invoice/(:any)'] = 'AdmissionController/editAdmissionInvoice/$1';
+$route['admission/update-admission-invoice'] = 'AdmissionController/updateAdmissionInvoice';
+$route['admission/print-invoice/(:any)'] = 'AdmissionController/printInvoice/$1';
+$route['admission/delete-admission-invoice/(:any)'] = 'AdmissionController/deleteAdmissionInvoice/$1';
 $route['admission/operation-details'] = 'AdmissionController/operationDetails';
 $route['admission/edit-operation-details/(:any)/(:any)'] = 'AdmissionController/editOperationDetails/$1/$2';
 $route['admission/update-operation-details/(:any)'] = 'AdmissionController/updateOperationDetails/$1';
 $route['admission/operation-details-invoice'] = 'AdmissionController/operationDetailsInvoice';
 $route['admission/patient-admission-info'] = 'AdmissionController/patientAdmissionInfo';
-//Invoice Individual
 $route['admission/invoice-individual/(:any)'] = 'AdmissionController/invoiceIndividual/$1';
+$route['admission/delete-operation-details/(:any)'] = 'AdmissionController/deleteOperationDetails/$1';
+

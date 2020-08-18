@@ -899,21 +899,6 @@ class Show_form extends CI_Controller {
             $this->load->view('website/login_check', $data);
         }
     }
-
-    public function types_of_product($msg) {
-        $user_type = $this->session->ses_user_type;
-        if ($user_type == "admin" || $user_type == "staff") {
-            $data['all_value'] = $this->Common_model->get_all_info('types_of_product');
-            $data['msg'] = $msg;
-            $this->load->view('admin/header');
-            $this->load->view('admin/types_of_product', $data);
-            $this->load->view('admin/footer');
-        } else {
-            $data['wrong_msg'] = "";
-            $this->load->view('website/login_check', $data);
-        }
-    }
-
     public function medicine_name($msg) {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin" || $user_type == "staff") {
@@ -959,22 +944,6 @@ class Show_form extends CI_Controller {
 //            $this->load->view('website/login_check', $data);
 //        }
 //    }
-
-    public function product_name($msg) {
-        $user_type = $this->session->ses_user_type;
-        if ($user_type == "admin" || $user_type == "staff") {
-            $data['all_value'] = $this->Common_model->get_all_info('product_name');
-            $data['all_product_category'] = $this->Common_model->get_all_info('types_of_product');
-            $data['msg'] = $msg;
-            $this->load->view('admin/header');
-            $this->load->view('admin/product_name', $data);
-            $this->load->view('admin/footer');
-        } else {
-            $data['wrong_msg'] = "";
-            $this->load->view('website/login_check', $data);
-        }
-    }
-
     public function medicine_presentation($msg) {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin" || $user_type == "staff") {
@@ -1410,17 +1379,16 @@ class Show_form extends CI_Controller {
         }
     }
 
-    public function appointment($msg) {
+    public function appointment() {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin" || $user_type == "staff" || $user_type == "accounts") {
             $data['all_doctor'] = $this->Common_model->get_all_info_orderby('doctor', 'record_id', 'DESC');
             $data['all_patient'] = $this->Common_model->get_all_info_orderby('patient', 'record_id', 'DESC');
             $data['all_value'] = $this->Common_model->get_all_info_orderby('appointment_info', 'record_id', 'DESC');
-            $data['msg'] = $msg;
             $this->load->view('admin/header');
             $this->load->view('admin/appointment', $data);
             $this->load->view('admin/footer');
-        } else {
+        }else{
             $data['wrong_msg'] = "";
             $this->load->view('website/login_check', $data);
         }

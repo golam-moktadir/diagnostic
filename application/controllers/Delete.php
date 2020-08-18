@@ -391,7 +391,8 @@ class Delete extends CI_Controller {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin"  || $user_type == "staff") {
             $this->Common_model->delete_info('record_id', $id, 'product_name');
-            redirect('Show_form/product_name/delete', 'refresh');
+            $this->session->set_flashdata('success', 'Deleted Successfully');
+            redirect(base_url().'product/product');
         } else {
             $data['wrong_msg'] = "";
             $this->load->view('website/login_check', $data);
@@ -402,7 +403,8 @@ class Delete extends CI_Controller {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin"  || $user_type == "staff") {
             $this->Common_model->delete_info('record_id', $id, 'types_of_product');
-            redirect('Show_form/types_of_product/delete', 'refresh');
+            $this->session->set_flashdata('success', 'Deleted Successfully');
+            redirect(base_url().'product/category');
         } else {
             $data['wrong_msg'] = "";
             $this->load->view('website/login_check', $data);

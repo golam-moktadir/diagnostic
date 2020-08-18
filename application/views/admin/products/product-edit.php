@@ -19,35 +19,20 @@
         font-size: 13px !important;
     }
 </style>
-
-<?php
-if ($msg == "main") {
-    $msg = "";
-} elseif ($msg == "empty") {
-    $msg = "Please fill out all required fields";
-} elseif ($msg == "created") {
-    $msg = "Created Successfully";
-} elseif ($msg == "edit") {
-    $msg = "Edited Successfully";
-} elseif ($msg == "delete") {
-    $msg = "Deleted Successfully";
-}
-?>
 <aside>
     <section class="content">
         <div class="row">
             <section class="col-xs-12 connectedSortable"> 
                 <div style="color: black; background: #a6d7ff; padding: 8px; border: 2px solid #055d9c; margin-bottom:5px;" class="no_print">
-                    <?php echo form_open_multipart('Insert/product_name'); ?>
+                    <form action="<?php echo base_url().'product/create-product'?>" method='post'>
+                    <h5 class="text-center text-info">Edit Product</h5>
                     <div class="box-body">
-                        <!--<p style="font-size: 20px;">Create Product Name</p>-->
-                        <p  style="font-size: 20px; color: #066;"><?php echo $msg; ?></p>
                         <div class="form-group col-sm-4 col-xs-12">
-                            <label for="product_category;">Product Category</label>
-                            <select name="product_category" id="product_category" class="form-control">
+                            <label for="category_id;">Product Category</label>
+                            <select name="category_id" id="category_id" class="form-control selectpicker">
                                 <option value="">-- Select --</option>
                                 <?php foreach ($all_product_category as $info) { ?>
-                                    <option value="<?php echo $info->types_of_product; ?>">
+                                    <option <?php if($product->category_id == $info->record_id) echo 'selected' ?> value="<?php echo $info->record_id; ?>">
                                         <?php echo $info->types_of_product; ?>
                                     </option>
                                 <?php } ?>
@@ -55,11 +40,12 @@ if ($msg == "main") {
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
                             <label for="product_name">Product Name</label>
-                            <input type="text" class="form-control" id="product_name" placeholder="" name="product_name">
+                            <input type="text" class="form-control" id="product_name" value="<?php echo $product->product_name ?>" name="product_name">
+                            <input type="hidden" name="record_id" value="<?php echo $product->record_id ?>">
                         </div>
                     </div>
                     <div class="clearfix" style="margin-top: 17px;">
-                        <button type="submit" class="pull-left btn btn-success" style="margin-top: 26px;">Create <i class="fa fa-arrow-circle-right"></i></button>
+                        <button type="submit" class="pull-left btn btn-success" style="margin-top: 26px;">Update <i class="fa fa-arrow-circle-right"></i></button>
                     </div>
                     </form>
                 </div>
@@ -87,13 +73,25 @@ if ($msg == "main") {
                                     ?>
                                     <tr>
                                         <td style="text-align: center;"><?php echo $count; ?></td>
-                                        <td style="text-align: center;"><?php echo $single_value->product_category; ?></td>
+                                        <?php 
+                                            foreach ($all_product_category as $info) { 
+                                                if($info->record_id == $single_value->category_id){
+                                        ?>
+                                        <td style="text-align: center;">
+                                            <?php echo $info->types_of_product ?>
+                                        </td>
+                                        <?php 
+                                            }
+                                        }
+                                        ?>
                                         <td style="text-align: center;"><?php echo $single_value->product_name; ?></td>
                                         <td style="text-align: center;">
-                                            <a style="margin: 5px;" class="btn btn-danger"
-                                               href="<?php echo base_url(); ?>Delete/product_name/<?php echo $single_value->record_id; ?>">Delete
+                                            <a class="btn btn-success" href="<?php echo base_url().'product/edit-product-name/'.$single_value->record_id ?>"><i class="fa fa-edit"></i>
                                             </a>
-                                        </td>
+                                            <a style="margin: 5px;" class="btn btn-danger"
+                                                   href="<?php echo base_url(); ?>Delete/product_name/<?php echo $single_value->record_id; ?>" onclick="return confirm('Are You Sure ?')"><i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>           
                                     </tr>
                                 <?php } ?>
                             </tbody>

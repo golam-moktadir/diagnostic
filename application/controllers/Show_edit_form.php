@@ -9,7 +9,17 @@ class Show_edit_form extends CI_Controller {
         parent::__construct();
         $this->load->model('Common_model');
     }
+    public function appointment($record_id,$patient_id){
+        $data['all_doctor'] = $this->Common_model->get_all_info_orderby('doctor', 'record_id', 'DESC');
+        $data['all_patient'] = $this->Common_model->get_all_info_orderby('patient', 'record_id', 'DESC');
+        $data['all_value'] = $this->Common_model->get_all_info_orderby('appointment_info', 'record_id', 'DESC');
+        $data['appointment'] = $this->Common_model->single_row(['record_id' => $record_id], 'appointment_info');
+        $data['patient'] = $this->Common_model->single_row(['record_id' => $patient_id], 'patient');
 
+        $this->load->view('admin/header');
+        $this->load->view('admin/appointment-edit', $data);
+        $this->load->view('admin/footer');
+    }
     public function consultancy($id, $msg) {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin" || $user_type == "staff" || $user_type == "accounts") {
@@ -187,7 +197,13 @@ class Show_edit_form extends CI_Controller {
             $this->load->view('website/login_check', $data);
         }
     }
-
+    public function designation($record_id){
+     $data['value'] = $this->Common_model->single_row(['record_id' => $record_id], 'designation');
+     $data['all_value'] = $this->Common_model->get_all_info('designation');
+     $this->load->view('admin/header');
+     $this->load->view('admin/designation-edit', $data);
+     $this->load->view('admin/footer');       
+    }
     public function create_user($id, $msg) {
         if ($this->session->userdata('ses_user_type') == "admin") {
             $data['one_value'] = $this->Common_model->get_allinfo_byid('staff', 'record_id', $id);

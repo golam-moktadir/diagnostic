@@ -38,7 +38,7 @@
                                     <td style="text-align: center;">
                                         <a class="btn btn-sm btn-success" href="<?php echo base_url().'operation/edit-category/'.$category->record_id ?>"><i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-danger" href="<?php echo base_url().'operation/delete-category/'.$category->record_id ?>"><i class="fa fa-trash-o"></i>
+                                        <a class="btn btn-sm btn-danger" href="<?php echo base_url().'operation/delete-category/'.$category->record_id ?>" onclick="return confirm('Are You Sure ?')"><i class="fa fa-trash-o"></i>
                                     </td>
                                 </tr>
                             <?php } ?>

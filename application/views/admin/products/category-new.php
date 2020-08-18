@@ -19,53 +19,38 @@
         font-size: 13px !important;
     }
 </style>
-
-<?php
-if ($msg == "main") {
-    $msg = "";
-} elseif ($msg == "empty") {
-    $msg = "Please fill out all required fields";
-} elseif ($msg == "created") {
-    $msg = "Created Successfully";
-} elseif ($msg == "edit") {
-    $msg = "Edited Successfully";
-} elseif ($msg == "delete") {
-    $msg = "Deleted Successfully";
-}
-?>
 <aside>
     <section class="content">
         <div class="row">
             <section class="col-xs-12 connectedSortable"> 
                 <div style="color: black; background: #a6d7ff; padding: 8px; border: 2px solid #055d9c; margin-bottom:5px;" class="no_print">
-                    <?php echo form_open_multipart('Insert/designation'); ?>
+                    <form action="<?php echo base_url().'product/create-product-category' ?>" method="post">
+                    <h5 class="text-center text-info">Product Category Form</h5>
+                    <h5 class="text-center text-success"><?php echo $this->session->flashdata('success') ?></h5>
+                    <h5 class="text-center text-danger"><?php echo $this->session->flashdata('error') ?></h5>
                     <div class="box-body">
-                        <!--<p style="font-size: 17px; color: green; text-align: center;">Create Designation</p>-->
-                        <p  style="font-size: 20px; color: #066;"><?php echo $msg; ?></p>
-                        <div class="form-group" style="width: 700px;">
-                            <label for="designation">Designation</label>
-                            <input type="text" class="form-control" id="designation" 
-                                    placeholder="" name="designation">
+                        <div class="form-group" style="width: 400px;">
+                            <label for="types_of_product" style="color: green;">Product Category</label>
+                            <input type="text" class="form-control" id="types_of_medicine" placeholder="" name="types_of_product">
                         </div>
                     </div>
                     <div class="box-footer clearfix">
-                        <button type="submit" class="pull-left btn btn-success">Submit <i class="fa fa-arrow-circle-right"></i></button>
+                        <button type="submit" class="pull-left btn btn-success" name="submit" value="submit">Create <i class="fa fa-arrow-circle-right"></i></button>
                     </div>
                     </form>
                 </div>
 
                 <div>
                     <div>
-                        <h4 style="color: blue; text-align: center;">Designation Info.</h4>                              
+                        <h4  style="color: blue; text-align: center;">Product Category Info.</h4>                               
                     </div>
 
-                    <!-- /.box-header -->
                     <div class="box-body table-responsive" style="width: 100%; overflow-x: scroll; color: black;">
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="text-align: center;">SL</th>
-                                    <th style="text-align: center;">Designation</th>
+                                    <th style="text-align: center;">Product Category</th>
                                     <th style="text-align: center;">Action</th>
                                 </tr>
                             </thead>
@@ -77,19 +62,18 @@ if ($msg == "main") {
                                     ?>
                                     <tr>
                                         <td style="text-align: center;"><?php echo $count; ?></td>
-                                        <td style="text-align: center;"><?php echo $single_value->designation; ?></td>
+                                        <td style="text-align: center;"><?php echo $single_value->types_of_product; ?></td>
                                         <td style="text-align: center;">
-                                            <a class="btn btn-info" href="<?php echo base_url().'Show_edit_form/designation/'.$single_value->record_id; ?>">Edit
-                                            </a>
-                                            <a class="btn btn-danger" href="<?php echo base_url(); ?>Delete/designation/<?php echo $single_value->record_id; ?>" onclick="return confirm('Are You Sure ??')">Delete
+                                            <a class="btn btn-sm btn-success" href="<?php echo base_url().'product/edit-category/'.$single_value->record_id ?>"><i class="fa fa-edit"></i>
+                                            <a style="margin: 5px;" class="btn btn-danger"
+                                               href="<?php echo base_url(); ?>Delete/types_of_product/<?php echo $single_value->record_id; ?>"><i class="fa fa-trash-o"></i>
                                             </a>
                                         </td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
-
                         </table>
-                    </div><!-- /.box-body -->
+                    </div>
                 </div>
             </section>
         </div>

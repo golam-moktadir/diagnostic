@@ -8,7 +8,7 @@
                             <button  id="print" onclick="window.print()" class="btn btn-warning waves-effect waves-light">
                                 <i class="fa fa-print"></i>
                             </button>
-                            <a href="<?php echo base_url(); ?>admission/operation-details">
+                            <a href="<?php echo base_url(); ?>admission/admission-invoice">
                                 <button class="btn btn-danger waves-effect waves-light">
                                     <i class="fa fa-window-close-o"></i>
                                 </button> 
@@ -27,25 +27,16 @@
                                     <b>Invoice No: </b><?php echo $invoice->record_id; ?>
                                 </div>
                                 <div class="form-group col-xs-6"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
-                                    <b>Date: </b><?php echo $invoice->operation_date; ?>
+                                    <b>Admission Date: </b><?php echo $invoice->admission_date; ?>
                                 </div>
                                 <div class="form-group col-xs-6"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
-                                    <b>Patient Name: </b><?php echo $invoice->name; ?><?php echo " [ID" . $invoice->patient_id . "]"; ?>
+                                    <b>Patient Name: </b><?php echo $invoice->name; ?><?php echo " [ID : " . $invoice->patient_id . "]"; ?>
                                 </div>
                                 <div class="form-group col-xs-3"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
                                     <b>Age: </b><?php echo $invoice->age; ?>
                                 </div>
                                 <div class="form-group col-xs-3"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
                                     <b>Mobile: </b><?php echo $invoice->mobile; ?>
-                                </div>
-                                <div class="form-group col-xs-4"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
-                                    <b>Surgeon Name: </b><?php echo $invoice->doctor_name; ?>
-                                </div>
-                                <div class="form-group col-xs-4"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
-                                    <b>Anesthesia: </b><?php echo $invoice->anesthesia; ?>
-                                </div>
-                                <div class="form-group col-xs-4"  style="color: black !important; font-size: 17px; padding: 0px 5px 0px 5px; margin: 0px;">
-                                    <b>Operation Name: </b><?php echo $invoice->operation_name; ?>
                                 </div>
                             </div>
                         </div>
@@ -57,54 +48,21 @@
 
                                 <?php } ?>
                             </div>
-                            <div class="col-md-6 col-xs-6" style="text-align: center;"><b>Operation INVOICE</b></div>
+                            <div class="col-md-6 col-xs-6" style="text-align: center;"><b>ADMISSION INVOICE</b></div>
                             <div class="col-md-3 col-xs-3"></div>
                         </div>
                         <div class="col md-12 col-xs-12" style="color: black; text-align: center;">
                             <table class="table table-bordered table-hover" style="width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center;">OT Expenditure</th>
-                                        <th style="text-align: right;">Price</th>
-                                        <!--<th style="text-align: center;">Total Price</th>-->
+                                        <th style="text-align: center;">Admission Fee</th>
+                                        <th style="text-align: center;"><?php echo $invoice->admission_fee?></th>
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center;">Advance Amount</th>
+                                        <th style="text-align: center;"><?php echo $invoice->advance_amount?></th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <?php 
-                                        $total_expenditure = 0; 
-                                        foreach ($equipments as $single_value) { 
-                                            $total_expenditure += $single_value->new_expenditure_price;
-                                    ?>
-                                        <tr>
-                                            <td style="text-align: center;"><?php echo $single_value->expenditure_title; ?></td>
-                                            <td style="text-align: right;"><?php echo $single_value->new_expenditure_price; ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                     <tr>
-                                        <td style="text-align: right;" colspan="2">Total Expenditure: <?php echo $total_expenditure; ?></td>
-
-                                    </tr>
-                                     <tr>
-                                        <td style="text-align: right;" colspan="2">Operation Price: <?php echo $invoice->operation_price; ?></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;" colspan="2">Total Price: <?php echo $invoice->total_price; ?></td>
-
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;" colspan="2">Discount: <?php echo $invoice->discount; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;" colspan="2">Sub Total: <?php echo $invoice->sub_total; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;" colspan="2">Paid: <?php echo $invoice->payable_amount; ?></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: right;" colspan="2">Due: <?php echo $invoice->due; ?></td>
-                                    </tr>
-                                </tbody>
                             </table>
                         </div>
                         <div class="row" style="margin-left: 15px;">

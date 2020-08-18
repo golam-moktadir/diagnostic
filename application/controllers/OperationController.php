@@ -88,7 +88,7 @@ class OperationController extends CI_Controller
 		$this->load->view('admin/footer');	
 	}
 	public function deleteOperationName($record_id){
-		$operation = $this->Common_model->single_row(['operation_id' => $record_id],'admission_patient');
+		$operation = $this->Common_model->single_row(['operation_id' => $record_id],'operation_details');
 		if(isset($operation->operation_id)){
 			$this->session->set_flashdata('error','Can not perform this operation. Because Other value is inserted Under this operation Name');
 		}
@@ -115,23 +115,29 @@ class OperationController extends CI_Controller
 			$this->session->set_flashdata('success','Expenditure Title Inserted');
 		}
 		else{
-			$this->Common_model->update_data_onerow('expenditure', $data, 'record_id',
-				  									$this->input->post('record_id')
-				  									);
+			$this->Common_model->update_data_onerow('expenditure', $data, 'record_id',$this->input->post('record_id'));
 			$this->session->set_flashdata('success','Expenditure Name Updated');
 		}
 		redirect(base_url().'operation/expenditure');
 	}
-	public function operationDetails(){
-		$invoices = $this->Join_model->operationInvoice();
+	public function editExpenditure($record_id){
+		$expenditures = $this->Common_model->get_all_info('expenditure');
+		$expenditure = $this->Common_model->single_row(['record_id' => $record_id],'expenditure');
+
 		$this->load->view('admin/header');
-		$this->load->view('admin/operation/operation-details',['invoices' => $invoices]);
+		$this->load->view('admin/operation/expenditure-edit',['expenditure' => $expenditure, 'expenditures' => $expenditures]);
 		$this->load->view('admin/footer');		
 	}
-	public function getInvoiceIndividual(){
-		$data['invoice'] =  $this->Join_model->invoiceIndividual($this->input->post('admission_id'));
-		//print_r($data['invoice']);
-		echo $this->load->view('admin/operation/get-invoice-individual', $data, true);
+	public function deleteExpenditure($record_id){
+		$expenditure = $this->Common_model->single_row(['expenditure_id' => $record_id],' operation_equipment');
+		if(isset($expenditure->expenditure_id)){
+			$this->session->set_flashdata('error','Can not perform this operation. Because Other value is inserted Under this operation Equipment');
+		}
+		else{
+			$this->Common_model->delete_info('record_id',$record_id,'expenditure');
+			$this->session->set_flashdata('success','Expenditure Name Deleted Successfully');
+		}
+		redirect(base_url().'operation/expenditure');
 	}
 }
 ?>

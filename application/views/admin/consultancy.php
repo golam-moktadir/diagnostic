@@ -247,6 +247,9 @@ if ($msg == "main") {
         $('#c_back').show();
         $('#patient_id').hide();
         $('#c_plus').hide();
+        $('#mobile').val('');
+        $('#age').val('');
+        $('#address').val('');
         c_status = 1;
     });
 

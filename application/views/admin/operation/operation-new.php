@@ -64,7 +64,7 @@
                                             <a class="btn btn-sm btn-success" href="<?php echo base_url().'operation/edit-operation-name/'.$single_value->record_id ?>"><i class="fa fa-edit"></i>
                                             </a>
                                             <a class="btn btn-sm btn-danger"
-                                               href="<?php echo base_url().'operation/delete-operation-name/'.$single_value->record_id ?>"><i class="fa fa-trash-o"></i>
+                                               href="<?php echo base_url().'operation/delete-operation-name/'.$single_value->record_id ?>" onclick="return confirm('Are You Sure ?')"><i class="fa fa-trash-o"></i>
                                             </a>
                                         </td>
                                     </tr>

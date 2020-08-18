@@ -1443,48 +1443,6 @@ class Insert extends CI_Controller {
             $this->load->view('website/login_check', $data);
         }
     }
-
-    public function product_name() {
-        if ($this->session->userdata('ses_user_type') == "admin" || $this->session->userdata('ses_user_type') == "staff") {
-            $this->form_validation->set_rules('product_name', 'Product Name', 'trim|required');
-            $this->form_validation->set_rules('product_category', 'Product Category', 'trim|required');
-            if ($this->form_validation->run() == FALSE) {
-                redirect('Show_form/medicine_name/empty', 'refresh');
-            } else {
-                $product_name = $this->input->post('product_name');
-                $product_category = $this->input->post('product_category');
-                $insert_data = array(
-                    'product_name' => $product_name,
-                    'product_category' => $product_category
-                );
-                $this->Common_model->insert_data('product_name', $insert_data);
-                redirect('Show_form/product_name/created', 'refresh');
-            }
-        } else {
-            $data['wrong_msg'] = "";
-            $this->load->view('website/login_check', $data);
-        }
-    }
-
-    public function types_of_product() {
-        if ($this->session->userdata('ses_user_type') == "admin" || $this->session->userdata('ses_user_type') == "staff") {
-            $this->form_validation->set_rules('types_of_product', 'Types of Product', 'trim|required');
-            if ($this->form_validation->run() == FALSE) {
-                redirect('Show_form/types_of_product/empty', 'refresh');
-            } else {
-                $types_of_product = $this->input->post('types_of_product');
-                $insert_data = array(
-                    'types_of_product' => $types_of_product
-                );
-                $this->Common_model->insert_data('types_of_product', $insert_data);
-                redirect('Show_form/types_of_product/created', 'refresh');
-            }
-        } else {
-            $data['wrong_msg'] = "";
-            $this->load->view('website/login_check', $data);
-        }
-    }
-
     public function medicine_presentation() {
         if ($this->session->userdata('ses_user_type') == "admin" || $this->session->userdata('ses_user_type') == "staff") {
             $this->form_validation->set_rules('medicine_presentation', 'Medicine Presentation', 'trim|required');
@@ -1706,46 +1664,37 @@ class Insert extends CI_Controller {
     public function appointment() {
         $user_type = $this->session->ses_user_type;
         if ($user_type == "admin" || $user_type == "staff") {
-            $this->load->model('Common_model');
-            $patient_name = $this->input->post('name');
-            $mobile = $this->input->post('mobile');
-            $address = $this->input->post('address');
-            $age = $this->input->post('age');
-            $doctor = explode("###", $this->input->post('doctor_name'));
-            $doctor_name = $doctor[0];
-            $designation = $doctor[1];
-            $doctor_fee = $this->input->post('doctor_fee');
-            $date = $this->input->post('date');
-            $appointment_time = $this->input->post('appointment_time');
-            $insert_data = array(
-                'patient_name' => $patient_name,
-                'mobile' => $mobile,
-                'address' => $address,
-                'age' => $age,
-                'doctor_name' => $doctor_name,
-                'doctor_fee' => $doctor_fee,
-                'date' => $date,
-                'appointment_time' => $appointment_time,
-                'status' => 0
-            );
-            $this->Common_model->insert_data('appointment_info', $insert_data);
-            $insert_data = array(
-                'name' => $patient_name,
-                'mobile' => $mobile,
-                'address' => $address,
-                'age' => $age
-            );
-            $this->Common_model->insert_data('patient', $insert_data);
-
-
-            $data["name"] = $patient_name;
-            $data["age"] = $age;
-            $data["doctor"] = $doctor_name;
-            $data["designation"] = $designation;
-            $data["date"] = $date;
-            $this->load->view('admin/header');
-            $this->load->view("admin/doctor_appointment_pad", $data);
-            $this->load->view('admin/footer');
+            if($this->input->post('patient_name')){
+                $insert_data = array(
+                        'name' => $this->input->post('patient_name'),
+                        'age' => $this->input->post('age'),
+                         'mobile' => $this->input->post('mobile'),
+                        'address' => $this->input->post('address'),
+                            );      
+                $insert_id = $this->Common_model->insert_data('patient', $insert_data);   
+            
+                $data = array(
+                    'date' => $this->input->post('date'),
+                    'patient_id' => $insert_id,
+                    'doctor_id' => $this->input->post('doctor_id'),
+                    'doctor_fee' => $this->input->post('doctor_fee'),
+                    'appointment_time' => $this->input->post('appointment_time'),
+                    'status' => 0
+                );
+            }
+            else{
+                $data = array(
+                    'date' => $this->input->post('date'),
+                    'patient_id' => $this->input->post('patient_id'),
+                    'doctor_id' => $this->input->post('doctor_id'),
+                    'doctor_fee' => $this->input->post('doctor_fee'),
+                    'appointment_time' => $this->input->post('appointment_time'),
+                    'status' => 0
+                );     
+            }
+            $this->Common_model->insert_data('appointment_info', $data);   
+            $this->session->set_flashdata('success', 'Inserted Successfully');
+            redirect(base_url().'Show_form/appointment');       
         } else {
             $data['wrong_msg'] = "";
             $this->load->view('website/login_check', $data);

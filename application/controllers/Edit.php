@@ -206,6 +206,11 @@ class Edit extends CI_Controller {
         }
     }
 
+    public function designation($record_id){
+        $data = ['designation' => $this->input->post('designation')];
+        $this->Common_model->update_data_onerow('designation', $data, 'record_id', $record_id);
+        redirect(base_url().'Show_form/designation/edit');
+    }
     public function insert_product_info($id) {
         if ($this->session->userdata('ses_user_type') == "admin") {
             $img_name = $id . ".jpg";
@@ -562,7 +567,24 @@ class Edit extends CI_Controller {
             $this->load->view('website/login_check', $data);
         }
     }
-
+    public function appointment($record_id, $patient_id){
+        $patient = [
+                    'name' => $this->input->post('name'),
+                    'age' => $this->input->post('age'),
+                    'mobile' => $this->input->post('mobile'),
+                    'address' => $this->input->post('address')
+                ]; 
+        $this->Common_model->update_data_onerow('patient', $patient, 'record_id', $patient_id);    
+        $appointment = [
+                    'date' => $this->input->post('date'),
+                    'doctor_id' => $this->input->post('doctor_id'),
+                    'doctor_fee' => $this->input->post('doctor_fee'),
+                    'appointment_time' => $this->input->post('appointment_time')
+                ];    
+        $this->Common_model->update_data_onerow('appointment_info', $appointment, 'record_id', $record_id);   
+        $this->session->set_flashdata('success', 'Updated Successfully'); 
+        redirect(base_url().'Show_form/appointment');
+    }
     public function assign_bed($id) {
         if ($this->session->userdata('ses_user_type') == "admin") {
 

@@ -177,7 +177,7 @@
                                             </a>
                                             <a href="<?php echo base_url().'admission/invoice-individual/'.$single_value->record_id ?>" class="btn btn-sm btn-info" title="Invoice"><i class="fa fa-eye"></i>
                                             </a>
-                                            <a href="<?php echo base_url(); ?>Delete/appointment/<?php echo $single_value->record_id; ?>" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i>
+                                            <a href="<?php echo base_url(); ?>admission/delete-operation-details/<?php echo $single_value->record_id; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are You Sure ?')"><i class="fa fa-trash-o"></i>
                                             </a>
                                         </td>
                                     </tr>
